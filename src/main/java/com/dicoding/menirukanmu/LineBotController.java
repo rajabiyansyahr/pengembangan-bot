@@ -204,7 +204,7 @@ public class LineBotController
                 actions.add(action4);
                 Template temp = new ButtonsTemplate("https://lh3.ggpht.com/Su-kBS_TEjK9ISAcAPNWMHL0OCNyiP56aeB5czxCqxgg3KrPfqL4qcRLJvwBjWummw=h310","Assalam Polban","Silahkan Add/Follow sosial media kita yang lainnya :)", actions);
                 TemplateMessage tempMsg = new TemplateMessage("Assalamu\'alaikum Wr. Wb.", temp);
-                sendButtonTempalte(tempMsg, payload.events[0].source.useId );
+                sendButtonTempalte(tempMsg, payload.events[0].source.userId );
             } catch (Exception e) {
                 System.out.println("Exception is raised ");
                 e.printStackTrace();
