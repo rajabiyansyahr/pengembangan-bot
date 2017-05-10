@@ -61,7 +61,7 @@ public class LineBotController
         String welcomeMsg = "Terimakasih sudah menambahkan Assalam Polban di kontak kamu! :)\n\nNantikan terus informasi seputar dunia islam dan kegiatan-kegiatan Assalam Polban lainnya disini.\n\nUntuk mendapatkan jadwal adzan hari ini, silahkan masukkan format:\nbot informasi adzan\n\n\n#SatuDalamIslam\n#PolbanMadani2017";
 
         if (eventType.equals("join")){
-            if (payload.events[0].source.type.equals("group")){
+            if (payload.events[0].source.type.equals("group")){ //ketika bot di invite join ke dalam group 
                 replyToUser(payload.events[0].replyToken, welcomeMsg);
                 try{
                     List<Action> actions = new ArrayList<Action>();
@@ -80,11 +80,27 @@ public class LineBotController
                     System.out.println("Exception is raised ");
                     e.printStackTrace();
                 }
+            } else if (payload.events[0].source.type.equals("room")){ //ketika bot di invite join ke dalam multi-chat
+                replyToUser(payload.events[0].replyToken, welcomeMsg);
+                try{
+                    List<Action> actions = new ArrayList<Action>();
+                    Action action = new URIAction("Instagram", "https://www.instagram.com/assalampolban/");
+                    Action action2 = new URIAction("Twitter", "https://www.twitter.com/assalampolban/");
+                    Action action3 = new URIAction("Facebook", "https://www.facebook.com/assalampolban/");
+                    Action action4 = new URIAction("LINE", "https://line.me/R/ti/p/%40LTA5871H");
+                    actions.add(action);
+                    actions.add(action2);
+                    actions.add(action3);
+                    actions.add(action4);
+                    Template temp = new ButtonsTemplate("https://lh3.ggpht.com/Su-kBS_TEjK9ISAcAPNWMHL0OCNyiP56aeB5czxCqxgg3KrPfqL4qcRLJvwBjWummw=h310","Assalam Polban","Silahkan Add/Follow sosial media kita yang lainnya :)", actions);
+                    TemplateMessage tempMsg = new TemplateMessage("Assalamu\'alaikum Wr. Wb.", temp);
+                    sendButtonTempalte(tempMsg, payload.events[0].source.roomId );
+                } catch (Exception e) {
+                    System.out.println("Exception is raised ");
+                    e.printStackTrace();
+                }
             }
-            if (payload.events[0].source.type.equals("room")){
-                replyToUser(payload.events[0].replyToken, "Hello Room");
-            }
-        } else if (eventType.equals("message")){
+        } else if (eventType.equals("message")){ // interaksi pesan dengan user
             if (payload.events[0].source.type.equals("group")){
                 idTarget = payload.events[0].source.groupId;
             } else if (payload.events[0].source.type.equals("room")){
@@ -100,7 +116,7 @@ public class LineBotController
                 msgText = msgText.toLowerCase();
                 String[] keyWords = msgText.split(" ");
         
-                if (!msgText.contains("bot leave")){
+                if (!msgText.contains("bot leave now")){
                     if(keyWords[0].equals("bot")){
                         if(keyWords[1].equals("informasi")){
                             if(keyWords[2].equals("adzan")){
@@ -135,6 +151,7 @@ public class LineBotController
                                     actions.add(action1);
                                     actions.add(action2);
                                     actions.add(action3);
+                
                                     // List<Action> actionz = new ArrayList<Action>();
                                     // Action action4 = new URIAction("Maghrib 05:44 am", "http://google.com");
                                     // Action action5 = new URIAction("Isya 06:55 am", "http://google.com");
@@ -172,79 +189,22 @@ public class LineBotController
                 }
 
             }
-
-                        // if(keyWords[0].equals("bot")){
-            //     if(keyWords[1].equals("keywords")){
-            //         try{
-            //             getMessageData(welcomeMsg, idTarget);
-            //         } catch (IOException e) {
-            //             System.out.println("Exception is raised ");
-            //             e.printStackTrace();
-            //         }
-            //     }
-            //     else if(keyWords[1].equals("reminder")){
-            //         try{
-            //             List<Action> actions = new ArrayList<Action>();
-			// 			Action action = new URIAction("Google", "http://google.com");
-			// 			actions.add(action);
-			// 			Action actionLeft = new URIAction("Action Left", "http://google.com");
-			// 			Action actionRight = new URIAction("Action Right", "http://google.com");
-			// 			Template temp = new ConfirmTemplate("google Text", actionLeft, actionRight);
-			// 			TemplateMessage tempMsg = new TemplateMessage("ini altText", temp);			
-			// 			sendButtonTempalte(tempMsg, idTarget);
-            //         } catch (Exception e) {
-            //             System.out.println("Exception is raised ");
-            //             e.printStackTrace();
-            //         }
-            //     }
-            //     else if(keyWords[1].equals("reminder2")){
-            //         try{
-            //             List<Action> actions = new ArrayList<Action>();
-			// 			Action action = new URIAction("Google", "http://google.com");
-			// 			actions.add(action);
-			// 			Template temp = new ButtonsTemplate("https://storage.googleapis.com/gweb-uniblog-publish-prod/static/blog/images/google-200x200.7714256da16f.png","Google","Ini alamat google", actions);
-			// 			TemplateMessage tempMsg = new TemplateMessage("ini altText", temp);
-            //             sendButtonTempalte(tempMsg, idTarget);
-            //         } catch (Exception e) {
-            //             System.out.println("Exception is raised ");
-            //             e.printStackTrace();
-            //         }
-            //     }
-            //     else if(keyWords[1].equals("reminder3")){
-            //         try{
-            //             List<Action> actions = new ArrayList<Action>();
-			// 			Action action1 = new URIAction("Google", "http://google.com");
-			// 			Action action2 = new URIAction("Google", "http://google.com");
-			// 			Action action3 = new URIAction("Google", "http://google.com");
-			// 			actions.add(action1);
-			// 			actions.add(action2);
-			// 			actions.add(action3);
-			// 			CarouselColumn cColumn1 = new CarouselColumn("https://storage.googleapis.com/gweb-uniblog-publish-prod/static/blog/images/google-200x200.7714256da16f.png","Google","Ini alamat google", actions);
-			// 			CarouselColumn cColumn2 = new CarouselColumn("https://storage.googleapis.com/gweb-uniblog-publish-prod/static/blog/images/google-200x200.7714256da16f.png","Google","Ini alamat google", actions);
-			// 			CarouselColumn cColumn3 = new CarouselColumn("https://storage.googleapis.com/gweb-uniblog-publish-prod/static/blog/images/google-200x200.7714256da16f.png","Google","Ini alamat google", actions);
-			// 			List<CarouselColumn> cColumns = new ArrayList<CarouselColumn>();
-			// 			cColumns.add(cColumn1);
-			// 			cColumns.add(cColumn2);
-			// 			cColumns.add(cColumn3);
-			// 			Template temp = new CarouselTemplate(cColumns);
-			// 			TemplateMessage tempMsg = new TemplateMessage("ini altText", temp);
-            //             sendButtonTempalte(tempMsg, idTarget);
-            //         } catch (Exception e) {
-            //             System.out.println("Exception is raised ");
-            //             e.printStackTrace();
-            //         }
-            //     }
-            // }
-            
         }
-        else if (eventType.equals("follow")){
+        else if (eventType.equals("follow")){ // ketika OA bot di-follow secara pribadi
+            replyToUser(payload.events[0].replyToken, welcomeMsg);
             try{
                 List<Action> actions = new ArrayList<Action>();
-                Action action = new URIAction("Google", "http://appurl.io/j28ev20h");
+                Action action = new URIAction("Instagram", "https://www.instagram.com/assalampolban/");
+                Action action2 = new URIAction("Twitter", "https://www.twitter.com/assalampolban/");
+                Action action3 = new URIAction("Facebook", "https://www.facebook.com/assalampolban/");
+                Action action4 = new URIAction("LINE", "https://line.me/R/ti/p/%40LTA5871H");
                 actions.add(action);
-                Template temp = new ButtonsTemplate("https://storage.googleapis.com/gweb-uniblog-publish-prod/static/blog/images/google-200x200.7714256da16f.png","Google","Ini alamat google", actions);
-                TemplateMessage tempMsg = new TemplateMessage("ini altText", temp);
-                sendButtonTempalte(tempMsg, payload.events[0].source.groupId );
+                actions.add(action2);
+                actions.add(action3);
+                actions.add(action4);
+                Template temp = new ButtonsTemplate("https://lh3.ggpht.com/Su-kBS_TEjK9ISAcAPNWMHL0OCNyiP56aeB5czxCqxgg3KrPfqL4qcRLJvwBjWummw=h310","Assalam Polban","Silahkan Add/Follow sosial media kita yang lainnya :)", actions);
+                TemplateMessage tempMsg = new TemplateMessage("Assalamu\'alaikum Wr. Wb.", temp);
+                sendButtonTempalte(tempMsg, payload.events[0].source.useId );
             } catch (Exception e) {
                 System.out.println("Exception is raised ");
                 e.printStackTrace();
